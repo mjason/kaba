@@ -16,7 +16,7 @@ Dotenv.load
 class Application
   class << self
     def connection
-      endpoint = ENV["LISA_TYPECHAT_ENDPOINT"] || "No endpoint"
+      endpoint = ENV["LISA_TYPECHAT_ENDPOINT"] || "https://lisa-typechat.listenai.com"
       @connection ||= Faraday.new(endpoint) do |faraday|
         faraday.adapter :async_http, clients: Async::HTTP::Faraday::PersistentClients
         faraday.request :json
