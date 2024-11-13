@@ -25,10 +25,5 @@ class Application
   end
 end
 
-def ddbug
-  require 'irb'
-  binding.irb
-end
-
 # 运行 DPodfile 文件，DPodfile 是一个 Ruby 文件
 load DatasetSource.podfile
