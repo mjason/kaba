@@ -33,6 +33,7 @@ class DatasetSource
       unless File.exist?(d_podfile_path)
         FileUtils.cp(File.join(__dir__, '_DPodfile_'), d_podfile_path)
       end
+      d_podfile_path
     end
   end
 
