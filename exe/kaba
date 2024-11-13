@@ -10,10 +10,14 @@ require 'async/http/faraday'
 require 'json'
 require "kaba"
 
+require 'dotenv'
+Dotenv.load
+
 class Application
   class << self
     def connection
-      @connection ||= Faraday.new('https://lisa-typechat.listenai.com') do |faraday|
+      endpoint = ENV["LISA_TYPECHAT_ENDPOINT"] || "No endpoint"
+      @connection ||= Faraday.new(endpoint) do |faraday|
         faraday.adapter :async_http, clients: Async::HTTP::Faraday::PersistentClients
         faraday.request :json
       end

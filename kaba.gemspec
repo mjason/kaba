@@ -36,6 +36,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency "async-http-faraday", "~> 0.19.0"
   spec.add_dependency "colorize", "~> 1.1"
   spec.add_dependency "tty-progressbar", "~> 0.18.3"
+  spec.add_dependency "dotenv", "~> 3.1"
 
   # For more information and examples about making a new gem, check out our
   # guide at: https://bundler.io/guides/creating_gem.html
