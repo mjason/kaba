@@ -17,11 +17,17 @@ alias kaba='docker run -it --rm -v "${PWD}:/workdir" ghcr.io/mjason/kaba:latest'
 ```
 
 ## 目录结构说明
-
-## 目录结构
+你的项目目录必须有 data 目录
 - data
   - row
+    - *.target.json
+    - *.input.txt
   - schema
+    - *.ts
 
-## 项目依赖
+`*`代表文件名，随你喜欢，一般推荐用数字即可，schema 怎么定义直接看 typechat 文档就好了。
 
+## 关联项目
+- [lisa_typechat_server](https://github.com/mjason/lisa_typechat_server)
+
+如果要修改服务地址你有两个方式，一个通过 `.env` 来处理，还有就是自己设置环境变量，变量名 `LISA_TYPECHAT_ENDPOINT`
