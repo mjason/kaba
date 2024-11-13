@@ -1,0 +1,24 @@
+#!/usr/bin/env ruby
+require "bundler/setup"
+Bundler.require(:default)
+require 'json'
+require "kaba"
+
+class Application
+  class << self
+    def connection
+      @connection ||= Faraday.new('https://lisa-typechat.listenai.com') do |faraday|
+        faraday.adapter :async_http, clients: Async::HTTP::Faraday::PersistentClients
+        faraday.request :json
+      end
+    end
+  end
+end
+
+def ddbug
+  require 'irb'
+  binding.irb
+end
+
+# 运行 DPodfile 文件，DPodfile 是一个 Ruby 文件
+load DatasetSource.podfile

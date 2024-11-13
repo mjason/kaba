@@ -1,0 +1,51 @@
+## 使用 Ruby 语言编写的数据集校验脚本
+# ddbug 断点调试
+# 使用 colorize 来输出带颜色的信息，https://github.com/fazibear/colorize
+# 使用 progressbar 来显示进度条，https://github.com/piotrmurach/tty-progressbar
+# 设置数据集目录, 如果使用 Docker 方式运行，需要将数据集挂载到 /data 目录下，DatasetSource 会自动加载 /data 目录下的数据集
+source = DatasetSource.new(File.join(__dir__, 'data'))
+schema = source.schema.join('resume.ts').read
+type_name = 'Resume'
+prompt = Prompt.new(schema, type_name)
+validate = Validate.new(schema: schema, type_name: type_name)
+dataset = Dataset.new(source.row, prompt)
+
+# # 
+# # 可以使用 run_file 来验证单个文件
+# response = validate.run_file(source.row.join('1.target.json'))
+# puts response
+# # 
+
+## 一般来说直接 run_files 就可以了，支持 limit 来限制读取的文件数量
+validate.run_files(source.row)
+
+## 数据集处理部分
+# 支持 limit 来限制读取的文件数量
+dataset.scan()
+dataset.save(source.join('train.jsonl'))
+
+## 高级玩法，不要轻易尝试
+#
+### 可以加入 limit 来限制读取的文件数量，validate.run_files('./data/row', limit: 1) do |response, json, file| 
+# validate.run_files(source.row) do |response, progressbar| 
+#   progressbar.log response.to_s unless response.success?
+# end
+# 
+#
+## 也支持 limit 来进行限制
+# Async do
+#   dataset.each do |row, ds|
+#     Async do
+#       instruction = prompt.render(File.read row.input_file)
+#       target = <<~Markdown
+#       ```json
+#       #{JSON.pretty_generate(JSON.parse(File.read(row.target_path)))}
+#       ```
+#       Markdown
+#       ds.add({ instruction: instruction, output: target })
+
+#       instruction = prompt.render(File.read(row.input_file), export: true)
+#       ds.add({ instruction: instruction, output: target })
+#     end
+#   end
+# end.wait
