@@ -7,3 +7,9 @@
 
 ## 命令
 `gem install kaba`
+
+on Linux
+`alias kamal='docker run -it --rm -v "${PWD}:/workdir" ghcr.io/mjason/kaba:latest'`
+
+on Mac
+`alias kamal='docker run -it --rm -v "${PWD}:/workdir" ghcr.io/mjason/kaba:latest'`
