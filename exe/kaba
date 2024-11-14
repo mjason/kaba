@@ -1,12 +1,6 @@
 #!/usr/bin/env ruby
 require "bundler/setup"
 
-require 'async'
-require 'faraday'
-require 'colorize'
-require 'tty-progressbar'
-require 'async/http/faraday'
-
 require 'json'
 require "kaba"
 

@@ -18,7 +18,7 @@ class Validate
   # 读取某个文件然后运行
   def run_file(file)
     input = JSON.parse File.read(File.expand_path file)
-    ValidateReponse.new run(input)
+    ValidateReponse.new run(input), file: file
   end
 
   # 读取某个文件夹下的然后运行，运行有结果了 block 会被调用
@@ -75,8 +75,8 @@ class Validate
 
     def to_s
       s = "#{'success:'.colorize(:bold_blue)} #{success? ? 'true'.colorize(:green) : 'false'.colorize(:red)}"
-      s += "\n#{'file:'.colorize(:bold_blue)} #{file.colorize(:yellow)}"
-      s += "\n#{'message:'.colorize(:bold_blue)} #{message.colorize(:yellow)}" unless success?
+      s += "\n#{'file:'.colorize(:bold_blue)} #{file&.to_s&.colorize(:yellow)}"
+      s += "\n#{'message:'.colorize(:bold_blue)} #{message&.colorize(:yellow)}" unless success?
       s += "\n\n"
     end
   end

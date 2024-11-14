@@ -24,6 +24,8 @@ validate.run_files(source.row)
 dataset.scan()
 dataset.save(source.join('train.jsonl'))
 
+puts "Dataset 校验结果：#{dataset.validate}"
+
 ## 高级玩法，不要轻易尝试
 #
 ### 可以加入 limit 来限制读取的文件数量，validate.run_files('./data/row', limit: 1) do |response, json, file| 
