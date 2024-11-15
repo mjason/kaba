@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    kaba (0.3.0)
+    kaba (0.3.1)
       async (~> 2.20)
       async-http-faraday (~> 0.19.0)
       colorize (~> 1.1)
