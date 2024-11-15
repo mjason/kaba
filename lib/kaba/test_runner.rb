@@ -46,14 +46,17 @@ class TestRunner
           #{JSON.pretty_generate(JSON.parse(File.read(row.target_path)))}
           ```
           Markdown
-          output = Application.llm_client.chat(
+          output = ""
+          Application.llm_client.chat(
             parameters: {
               model: model,
               messages: [ { role: 'user', content: input } ],
               temperature: temperature,
+              stream: proc do |chunk, _bytesize|
+                output += chunk.dig("choices", 0, "delta", "content")
+              end
             }
-          ).dig("choices", 0, "message", "content")
-          
+          )
 
           output_json = JSON.parse_llm_response output
 
