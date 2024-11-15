@@ -2,22 +2,18 @@
 require "bundler/setup"
 
 require 'json'
-require "kaba"
-
 require 'dotenv'
 Dotenv.load
 
-class Application
-  class << self
-    def connection
-      endpoint = ENV["LISA_TYPECHAT_ENDPOINT"] || "https://lisa-typechat.listenai.com"
-      @connection ||= Faraday.new(endpoint) do |faraday|
-        faraday.adapter :async_http, clients: Async::HTTP::Faraday::PersistentClients
-        faraday.request :json
-      end
-    end
-  end
-end
+require "kaba"
 
-# 运行 DPodfile 文件，DPodfile 是一个 Ruby 文件
-load DatasetSource.podfile
+if ARGV[0] == 'test'
+  # 运行测试程序
+  load DatasetSource.testfile
+elsif ARGV[0] == 'version'
+  # 显示版本号
+  puts Kaba::VERSION
+else
+  # 运行 DPodfile 文件，DPodfile 是一个 Ruby 文件
+  load DatasetSource.podfile
+end

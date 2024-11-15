@@ -5,7 +5,7 @@ class DatasetSource
     @path = path
   end
 
-  [:row, :schema].each do |method_name|
+  [:row, :schema, :test].each do |method_name|
     define_method(method_name) do
       self.class.new(File.join(@path, method_name.to_s))
     end
@@ -29,13 +29,22 @@ class DatasetSource
 
   class << self
     def podfile
-      d_podfile_path = File.join(Dir.pwd, 'DPodfile')
+      d_podfile_path = File.join(Dir.pwd, 'DPodfile.rb')
       unless File.exist?(d_podfile_path)
         FileUtils.cp(File.join(__dir__, '_DPodfile_'), d_podfile_path)
       end
       d_podfile_path
     end
+
+    def testfile
+      d_testfile_path = File.join(Dir.pwd, 'DTestfile.rb')
+      unless File.exist?(d_testfile_path)
+        FileUtils.cp(File.join(__dir__, '_DTestfile_'), d_testfile_path)
+      end
+      d_testfile_path
+    end
   end
+
 
 end
 

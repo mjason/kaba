@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Report</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      line-height: 1.6;
+    }
+    .header {
+      margin-bottom: 20px;
+    }
+    .header h1 {
+      font-size: 24px;
+    }
+    .metrics {
+      font-size: 18px;
+      margin-bottom: 10px;
+    }
+    .line-item {
+      margin-bottom: 20px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      background-color: #f9f9f9;
+    }
+    .line-item h2 {
+      font-size: 18px;
+      margin: 0;
+      padding: 10px;
+      background-color: #f0f0f0;
+      cursor: pointer;
+    }
+    .line-item h2 .status {
+      font-size: 14px;
+      color: #666;
+      margin-left: 10px;
+    }
+    .line-item .content {
+      display: none;
+      padding: 10px;
+    }
+    .line-item pre {
+      background-color: #282c34;
+      color: #abb2bf;
+      padding: 10px;
+      overflow-x: auto;
+      border-radius: 5px;
+    }
+  </style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/default.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      // Initialize Highlight.js
+      hljs.highlightAll();
+
+      // Add toggle functionality
+      document.querySelectorAll(".line-item h2").forEach(header => {
+        header.addEventListener("click", () => {
+          const content = header.nextElementSibling;
+          content.style.display = content.style.display === "none" ? "block" : "none";
+        });
+      });
+    });
+  </script>
+</head>
+<body>
+  <div class="header">
+    <h1>Test Report</h1>
+    <div class="metrics">
+      <p><strong>测试总数: </strong><%= @lines.size %></p>
+      <p><strong>类型测试通过: </strong><%= @type_right_total %></p>
+      <p><strong>平均分: </strong><%= (@score_total.to_f / @lines.size).round(2) %></p>
+    </div>
+  </div>
+
+  <div class="content">
+    <% @lines.each_with_index do |line, index| %>
+      <div class="line-item">
+        <h2>
+          测试路径: <%= line[:row].input_file %>
+          <span class="status">
+            <%= line[:type_check_response]["success"] ? "✅ 定义检查" : "❌ 定义检查" %> | 得分: <%= line[:judge_json]["score"] %>
+          </span>
+        </h2>
+
+        <div class="content">
+          <div class="section">
+            <strong>AI裁判输出:</strong>
+            <pre><code class="language-json"><%= JSON.pretty_generate line[:judge_json] %></code></pre>
+          </div>
+
+          <div class="section">
+            <strong>类型检查:</strong>
+            <pre><code class="language-json"><%= JSON.pretty_generate(line[:type_check_response]) %></code></pre>
+          </div>
+
+          <div class="section">
+            <strong>Prompt:</strong>
+            <pre><code class="language-markdown"><%= line[:input] %></code></pre>
+          </div>
+
+          <div class="section">
+            <strong>原始输出:</strong>
+            <pre><code class="language-markdown"><%= line[:output] %></code></pre>
+          </div>
+
+          <div class="section">
+            <strong>格式化输出:</strong>
+            <pre><code class="language-json"><%= JSON.pretty_generate(line[:output_json]) %></code></pre>
+          </div>
+
+          <div class="section">
+            <strong>目标结果:</strong>
+            <pre><code class="language-json"><%= line[:target] %></code></pre>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</body>
+</html>

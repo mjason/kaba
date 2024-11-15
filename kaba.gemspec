@@ -37,6 +37,8 @@ Gem::Specification.new do |spec|
   spec.add_dependency "colorize", "~> 1.1"
   spec.add_dependency "tty-progressbar", "~> 0.18.3"
   spec.add_dependency "dotenv", "~> 3.1"
+  spec.add_dependency "ruby-openai", "~> 7.3"
+  spec.add_dependency "json-repair", "~> 0.2.0"
 
   # For more information and examples about making a new gem, check out our
   # guide at: https://bundler.io/guides/creating_gem.html

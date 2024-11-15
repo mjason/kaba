@@ -13,9 +13,9 @@ class Prompt
     request_body = {
       schema: schema,
       typeName: @type_name,
-      inpu: input
+      input: input
     }
-    Application.connection.post('/prompt', request_body).body
+    resp = Application.connection.post('/prompt', request_body).body
   end
 
   class << self

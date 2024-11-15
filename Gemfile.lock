@@ -1,12 +1,14 @@
 PATH
   remote: .
   specs:
-    kaba (0.2.3)
+    kaba (0.3.0)
       async (~> 2.20)
       async-http-faraday (~> 0.19.0)
       colorize (~> 1.1)
       dotenv (~> 3.1)
       faraday (~> 2.12)
+      json-repair (~> 0.2.0)
+      ruby-openai (~> 7.3)
       tty-progressbar (~> 0.18.3)
 
 GEM
@@ -38,12 +40,15 @@ GEM
       fiber-local (~> 1.1)
       json
     dotenv (3.1.4)
-    faraday (2.12.0)
-      faraday-net_http (>= 2.0, < 3.4)
+    event_stream_parser (1.0.0)
+    faraday (2.12.1)
+      faraday-net_http (>= 2.0, < 3.5)
       json
       logger
-    faraday-net_http (3.3.0)
-      net-http
+    faraday-multipart (1.0.4)
+      multipart-post (~> 2)
+    faraday-net_http (3.4.0)
+      net-http (>= 0.5.0)
     fiber-annotation (0.2.0)
     fiber-local (1.1.0)
       fiber-storage
@@ -51,9 +56,11 @@ GEM
     io-endpoint (0.14.0)
     io-event (1.7.3)
     io-stream (0.6.1)
-    json (2.8.1)
+    json (2.8.2)
+    json-repair (0.2.0)
     logger (1.6.1)
     metrics (0.12.1)
+    multipart-post (2.4.1)
     net-http (0.5.0)
       uri
     protocol-hpack (1.5.1)
@@ -64,6 +71,10 @@ GEM
       protocol-hpack (~> 1.4)
       protocol-http (~> 0.18)
     rake (13.2.1)
+    ruby-openai (7.3.1)
+      event_stream_parser (>= 0.3.0, < 2.0.0)
+      faraday (>= 1)
+      faraday-multipart (>= 1)
     strings-ansi (0.2.0)
     traces (0.14.1)
     tty-cursor (0.7.1)
@@ -74,7 +85,7 @@ GEM
       unicode-display_width (>= 1.6, < 3.0)
     tty-screen (0.8.2)
     unicode-display_width (2.6.0)
-    uri (1.0.1)
+    uri (1.0.2)
 
 PLATFORMS
   arm64-darwin-24

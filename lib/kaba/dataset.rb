@@ -36,7 +36,9 @@ class Dataset
   end
 
   def scan(limit: nil)
-    progressbar = TTY::ProgressBar.new("Dataset: [:bar] :percent :current/:total", total: @data_files.size)
+    progressbar = TTY::ProgressBar.new(
+      "Dataset: [:bar] :percent :current/:total", 
+      total: @data_files.first(limit || @data_files.size).size)
     Async do
       _each(limit: limit) do |row, ds|
         Async do
@@ -57,12 +59,4 @@ class Dataset
     end.wait
   end
 
-end
-
-class Row
-  attr_reader :target_path, :input_file
-  def initialize(file)
-    @target_path = File.expand_path(file)
-    @input_file = @target_path.sub(/\.target\.json$/, '.input.txt')
-  end
 end

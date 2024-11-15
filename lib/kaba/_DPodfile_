@@ -1,8 +1,6 @@
 ## 使用 Ruby 语言编写的数据集校验脚本
-# binding.irb 断点调试
 # 使用 colorize 来输出带颜色的信息，https://github.com/fazibear/colorize
 # 使用 progressbar 来显示进度条，https://github.com/piotrmurach/tty-progressbar
-# 设置数据集目录, 如果使用 Docker 方式运行，需要将数据集挂载到 /data 目录下，DatasetSource 会自动加载 /data 目录下的数据集
 source = DatasetSource.new(File.join(__dir__, 'data'))
 schema = source.schema.join('resume.ts').read
 type_name = 'Resume'
