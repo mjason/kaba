@@ -10,11 +10,12 @@ class Application
 
     def llm_client
       @llm_client ||= OpenAI::Client.new(
+        log_errors: true,
         access_token: env!("LISA_ACCESS_TOKEN"),
         request_timeout: ENV.fetch("LISA_LLM_REQUEST_TIMEOUT", 120).to_i,
         uri_base: ENV.fetch("LISA_LLM_URI_BASE", "https://api.listenai.com")
       ) do |faraday|
-        faraday.adapter :async_http, clients: Async::HTTP::Faraday::PersistentClients
+        faraday.adapter Faraday.default_adapter, clients: Async::HTTP::Faraday::PersistentClients
       end
     end
 
