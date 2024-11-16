@@ -12,6 +12,7 @@ Gem::Specification.new do |spec|
   spec.description = "用来做数据集的工具"
   spec.homepage = "https://github.com/mjason/kaba.git"
   spec.required_ruby_version = ">= 3.3.0"
+  spec.license = "MIT"
 
   # spec.metadata["allowed_push_host"] = "TODO: Set to your gem server 'https://example.com'"
 
