@@ -26,7 +26,8 @@ class TestRunner
     model: 'spark-general-4.0', 
     judge_model: 'spark-general-4.0',  
     judge_temperature: 0.1, 
-    temperature: 0.1
+    temperature: 0.1,
+    semaphore_limit: 5
     )
 
     progressbar = TTY::ProgressBar.new(
@@ -37,8 +38,9 @@ class TestRunner
     progressbar.start
 
     Async do
+      semaphore = Async::Semaphore.new(semaphore_limit)
       _each(limit: limit) do |row|
-        Async do |task|
+        semaphore.async do |task|
           input = @prompt.render(File.read row.input_file)
 
           target = <<~Markdown
@@ -64,7 +66,7 @@ class TestRunner
           @type_right_total += 1 if type_check_response["success"]
           
           judge_input = Judge.new(input: input, output: output, target: target).render
-          judge_response = Application.llm_client.chat(
+          judge_response = Application.judge_llm_client.chat(
             parameters: {
               model: judge_model,
               messages: [ { role: 'user', content: judge_input } ],

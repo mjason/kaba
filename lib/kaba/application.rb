@@ -19,6 +19,17 @@ class Application
       end
     end
 
+    def judge_llm_client
+      @judge_llm_client ||= OpenAI::Client.new(
+        log_errors: true,
+        access_token: env!("JUDGE_ACCCESS_TOKEN"),
+        request_timeout: ENV.fetch("LISA_LLM_REQUEST_TIMEOUT", 120).to_i,
+        uri_base: ENV.fetch("JUDGE_LLM_URI_BASE", "https://api.listenai.com")
+      ) do |faraday|
+        faraday.adapter Faraday.default_adapter, clients: Async::HTTP::Faraday::PersistentClients
+      end
+    end
+
     def llm_client_extra_headers=(headers)
       OpenAI.configure do |config|
         config.extra_headers = headers

@@ -31,3 +31,14 @@ alias kaba='docker run -it --rm -v "${PWD}:/workdir" ghcr.io/mjason/kaba:latest'
 - [lisa_typechat_server](https://github.com/mjason/lisa_typechat_server)
 
 如果要修改服务地址你有两个方式，一个通过 `.env` 来处理，还有就是自己设置环境变量，变量名 `LISA_TYPECHAT_ENDPOINT`
+
+## changelog
+
+.env 需要更新
+```
+; LISA_TYPECHAT_ENDPOINT=https://lisa-typechat.listenai.com
+LISA_ACCESS_TOKEN=聆思平台的KEY
+
+JUDGE_ACCCESS_TOKEN=可以和LISA_ACCESS_TOKEN
+JUDGE_LLM_URI_BASE=如果需要其他提供商可以填，默认不填
+```
