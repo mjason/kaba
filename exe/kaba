@@ -6,14 +6,42 @@ require 'dotenv'
 Dotenv.load
 
 require "kaba"
+require 'thor'
 
-if ARGV[0] == 'test'
-  # 运行测试程序
-  load DatasetSource.testfile
-elsif ARGV[0] == 'version'
-  # 显示版本号
-  puts Kaba::VERSION
-else
-  # 运行 DPodfile 文件，DPodfile 是一个 Ruby 文件
-  load DatasetSource.podfile
+class KabaCommand < Thor
+  desc "test", "Run the test program"
+  def test
+    load DatasetSource.testfile
+  end
+
+  desc "version", "Show the version"
+  def version
+    puts Kaba::VERSION
+  end
+
+  desc "exec FILE", "Run a specified Ruby file"
+  def exec(file)
+    load file
+  end
+
+  desc "create", "Run the DPodfile (default behavior)"
+  def create
+    load DatasetSource.podfile
+  end
+
+  desc "validate", "Validate the environment"
+  def validate
+    Boot.validate
+  end
+
+  # 默认行为处理（兼容现有行为）
+  def self.start(args = ARGV, config = {})
+    if args.empty?
+      new.create
+    else
+      super
+    end
+  end
 end
+
+KabaCommand.start

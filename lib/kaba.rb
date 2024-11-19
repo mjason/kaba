@@ -19,6 +19,7 @@ require_relative "kaba/prompt"
 require_relative "kaba/validate"
 require_relative "kaba/judge"
 require_relative "kaba/test_runner"
+require_relative "kaba/boot"
 
 module Kaba
   class Error < StandardError; end

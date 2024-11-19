@@ -19,7 +19,14 @@ module Boot
 
       puts "Created .env file, please fill in the necessary information."
     end
+  end
 
-    
+  def validate
+    puts "Validating..."
+    Application.env!('LISA_ACCESS_TOKEN')
+    Application.env!('JUDGE_ACCCESS_TOKEN')
+    puts "Validation passed."
+  rescue => e
+    puts "Validation failed: #{e.message}"
   end
 end
