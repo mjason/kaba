@@ -5,6 +5,8 @@ class Dataset
     @data_files = Dir.glob(File.join(File.expand_path(data_dir), '*.target.json'))
     @lines = []
     @prompt = prompt
+
+    @formats_size = 0
   end
 
   ## 实现一个 each 方法，可以让用户通过 block 的方式遍历数据集，提供一个 add 方法，可以将数据添加到数据集中
@@ -32,26 +34,62 @@ class Dataset
   end
 
   def validate
-    @lines.size == (@data_files.size * 2)
+    @lines.size == @formats_size
   end
 
-  def scan(limit: nil)
+  def scan(limit: nil, formats: ['json', 'yml', 'json_pretty'])
+    @formats_size = 0
     progressbar = TTY::ProgressBar.new(
       "Dataset: [:bar] :percent :current/:total", 
       total: @data_files.first(limit || @data_files.size).size)
     Async do
       _each(limit: limit) do |row, ds|
         Async do
-          instruction = @prompt.render(File.read row.input_file)
-          target = <<~Markdown
-          ```json
-          #{JSON.pretty_generate(JSON.parse(File.read(row.target_path)))}
-          ```
-          Markdown
-          ds.add({ instruction: instruction, output: target })
+          # 格式化输出
+          if formats.include?('json_pretty')
+            pretty_target = <<~Markdown
+            ```json
+            #{JSON.pretty_generate(JSON.parse(File.read(row.target_path)))}
+            ```
+            Markdown
 
-          instruction = @prompt.render(File.read(row.input_file), export: true)
-          ds.add({ instruction: instruction, output: target })
+            instruction = @prompt.render(File.read(row.input_file), pretty_model: true)
+            ds.add({ instruction: instruction, output: pretty_target })
+
+            instruction = @prompt.render(File.read(row.input_file), export: true, pretty_model: true)
+            ds.add({ instruction: instruction, output: pretty_target })
+
+            @formats_size += 2
+          end
+
+          # 未格式化输出
+          if formats.include?('json')
+            json_target = <<~Markdown
+            ```json
+            #{JSON.generate(JSON.parse(File.read(row.target_path)))}
+            ```
+            Markdown
+            instruction = @prompt.render(File.read(row.input_file), pretty_model: false)
+            ds.add({ instruction: instruction, output: json_target })
+
+            instruction = @prompt.render(File.read(row.input_file), export: true, pretty_model: false)
+            ds.add({ instruction: instruction, output: json_target })
+
+            @formats_size += 2
+          end
+
+          # YAML 格式输出
+          if formats.include?('yml')
+            yaml_target = <<~Markdown
+            ```yaml
+            #{YAML.dump(JSON.parse(File.read(row.target_path))).sub(/^---\s*\n/, '')}
+            ```
+            Markdown
+            instruction = @prompt.render(File.read(row.input_file), format: 'yml')
+            ds.add({ instruction: instruction, output: yaml_target })
+
+            @formats_size += 1
+          end
 
           progressbar.advance
         end

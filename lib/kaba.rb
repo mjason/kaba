@@ -7,6 +7,7 @@ require 'tty-progressbar'
 require 'async/http/faraday'
 require 'openai'
 require 'json/repair'
+require 'yaml'
 
 require_relative "kaba/application"
 require_relative "kaba/json"
